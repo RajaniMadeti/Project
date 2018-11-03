@@ -25,8 +25,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-nodemon');
     
 
-    grunt.registerTask('default', [
-       
+    grunt.registerTask('default', [      
         'nodemon'
     ]);
     grunt.registerTask('production', [
