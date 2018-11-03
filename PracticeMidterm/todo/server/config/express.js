@@ -24,8 +24,10 @@ module.exports = function (app, config) {
     });
 
 
+  //  require('../app/models/todo');
+   // require('../app/controllers/todo')(app, config);
 
-  //  if (process.env.NODE_ENV !== 'test') {
+    if (process.env.NODE_ENV !== 'test') {
         app.use(morgan('dev'));
 
         mongoose.set('debug', true);
@@ -35,34 +37,15 @@ module.exports = function (app, config) {
 
 
         app.use(function (req, res, next) {
-            logger.log('info' + req.connection.remoteAddress);
+            logger.log('Request from ' + req.connection.remoteAddress, 'info');
             next();
         });
-   // }
-
-
-
+    }
 
     app.use(bodyParser.json());
-
     app.use(express.static(config.root + '/public'));
 
-    require('../app/models/todo') ;
-
-    require('../app/controllers/todo') (app, config);
-
-// Dont use glob
-//    var models = glob.sync(config.root + '/app/models/*.js');
-//    models.forEach(function (model) {
-//        require(model);
-//    });
-
-//    var controllers = glob.sync(config.root + '/app/controllers/*.js');
-//    controllers.forEach(function (controller) {
-//        require(controller)(app, config);
-//    });
-
-
+    app.use(express.static(config.root + '/config/express.js'));
 
     app.use(function (req, res) {
         // logger.log('error', 'File not found');
