@@ -4,7 +4,7 @@ var logger = require('./logger');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var bluebird = require('bluebird');
-//var glob = require('glob');
+
 
 
 module.exports = function (app, config) {
@@ -12,6 +12,7 @@ module.exports = function (app, config) {
     logger.log('info', "Loading Mongoose functionality");
     mongoose.Promise = bluebird;
     mongoose.connect(config.db);
+
     var db = mongoose.connection;
     db.on('error', function () {
         throw new Error('unable to connect to database at ' + config.db);
@@ -24,9 +25,6 @@ module.exports = function (app, config) {
     });
 
 
-  //  require('../app/models/todo');
-   // require('../app/controllers/todo')(app, config);
-
     if (process.env.NODE_ENV !== 'test') {
         app.use(morgan('dev'));
 
@@ -35,7 +33,7 @@ module.exports = function (app, config) {
             logger.log('info', 'Mongoose connected to the database');
         });
 
-
+        
         app.use(function (req, res, next) {
             logger.log('Request from ' + req.connection.remoteAddress, 'info');
             next();
@@ -45,7 +43,8 @@ module.exports = function (app, config) {
     app.use(bodyParser.json());
     app.use(express.static(config.root + '/public'));
 
-    app.use(express.static(config.root + '/config/express.js'));
+    require('../app/models/todo');
+    require('../app/controllers/todo')(app, config);
 
     app.use(function (req, res) {
         // logger.log('error', 'File not found');

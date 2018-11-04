@@ -29,10 +29,10 @@ module.exports = function (app, config) {
       router.post('/todos', asyncHandler(async (req, res) => {
                 logger.log('info', 'Creating todo');
                 var todo = new Todo(req.body);
-                 await todo.save()
-                .then(result => {
+                 const result = await todo.save()
+              //  .then(result => {
                         res.status(201).json(result);
-            })
+            
       }));
         
          router.put('/todos', asyncHandler(async (req, res) => {
@@ -51,5 +51,6 @@ module.exports = function (app, config) {
                                 res.status(200).json(result);
                             })
                     }));
+
 
 };
